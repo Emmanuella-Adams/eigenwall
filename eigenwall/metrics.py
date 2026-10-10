@@ -94,3 +94,35 @@ def beam_direction_error(
     peak_test = angles_deg[np.argmax(p_test)]
 
     return float(np.abs(peak_test - peak_ref))
+
+
+def compute_sinr_db(
+    weights: np.ndarray,
+    steering_target: np.ndarray,
+    R_interf_noise: np.ndarray,
+    target_power: float = 1.0
+) -> float:
+    """
+    Compute Output Signal-to-Interference-plus-Noise Ratio (SINR) in dB:
+        SINR = (P_s * |w^H * a_s|^2) / (w^H * R_{i+n} * w)
+    """
+    sig_out = target_power * float(np.abs(np.vdot(weights, steering_target)) ** 2)
+    in_out = float(np.real(np.vdot(weights, R_interf_noise @ weights)))
+    if in_out < 1e-15:
+        return 100.0
+    return float(10.0 * np.log10(sig_out / in_out))
+
+
+def multi_null_depth_db(
+    weights: np.ndarray,
+    target_angle: float,
+    interference_angles: list,
+    wavelength: float = 1.0,
+    spacing: Optional[float] = None
+) -> dict:
+    """Compute null depths in dB across multiple simultaneous interference angles."""
+    results = {}
+    for angle_i in interference_angles:
+        nd = null_depth_db(weights, target_angle, angle_i, wavelength, spacing)
+        results[angle_i] = nd
+    return results

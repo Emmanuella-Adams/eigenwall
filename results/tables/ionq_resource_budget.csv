@@ -1,0 +1,10 @@
+Resource / Metric,Value,Unit
+Total Qubits,7,qubits
+Circuit Depth (IonQ Basis),939,layers
+Total Gate Count,1609,gates
+Native 2-Qubit R_XX Gates,356,MS gates
+Single-Qubit Rotations,1253,gates
+Estimated Execution Time,83.73,ms
+Trapped-Ion T2 Coherence Time,1000.0,ms
+Coherence Safety Margin,11.9x,ratio
+Coherence Survival Probability,91.97%,prob

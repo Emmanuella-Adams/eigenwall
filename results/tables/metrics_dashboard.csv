@@ -1,9 +1,14 @@
 Metric,Classical,Quantum,Difference
-Solution Fidelity F,1.0000,1.0000,0.0000
+Solution Fidelity F,1.0000,0.9992,0.0008
+Output SINR (dB),6.52 dB,6.56 dB,0.04 dB
 Target Power Gain,1.0000,1.0000,0.0000
-Interference Power Gain,6.31e-04,7.89e-04,1.58e-04
-Null Depth (dB),32.00 dB,31.03 dB,0.97 dB
-Peak Beam Direction,20.8 deg,20.8 deg,0.00 deg
-Residual Error,0.0000,0.0076,0.0076
+Null Depth Interf 1 (-30°),29.18 dB,31.60 dB,2.41 dB
+Null Depth Interf 2 (+50°),29.14 dB,33.65 dB,4.52 dB
+Peak Beam Direction,18.0 deg,17.8 deg,0.25 deg
+Residual Error,0.0000,0.0301,0.0301
 Quantum Qubits,—,7,—
+Native R_XX Gates (IonQ),—,356,—
 Circuit Depth,—,52,—
+Quantum Success Probability,—,0.0999,—
+Estimated Execution Time (ms),—,83.73,—
+Coherence Safety Margin,—,11.9x,—
