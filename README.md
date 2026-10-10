@@ -200,6 +200,7 @@ python first.py
 ```
 - **IonQ Cloud Execution:** If an `IONQ_API_KEY` is detected in your environment or `.env` file, `first.py` automatically authenticates with `qiskit_ionq.IonQProvider` and executes on the IonQ Cloud Simulator (`simulator`).
 - **Trapped-Ion Emulation:** If no API key is set, `first.py` transpiles the circuit into IonQ native trapped-ion basis gates (`rxx`, `rx`, `ry`, `rz`, `h`) and simulates the hardware execution on `AerSimulator`.
+- *This effort is supported by Qollab & IonQ*
 
 ### Reproducing All Individual Experiments
 ```bash
