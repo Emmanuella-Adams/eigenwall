@@ -26,7 +26,6 @@ import matplotlib.pyplot as plt
 from qiskit import QuantumCircuit, QuantumRegister, ClassicalRegister, transpile
 from qiskit.circuit.library import QFTGate, UnitaryGate, RYGate
 from qiskit.quantum_info import Statevector
-from qiskit_aer import AerSimulator
 
 # Optional IonQ provider import
 try:
@@ -34,6 +33,7 @@ try:
     HAS_IONQ = True
 except ImportError:
     HAS_IONQ = False
+# Note: AerSimulator import removed; using IonQ simulator only.
 
 # Default parameters
 SHOTS = 8192
@@ -357,18 +357,16 @@ def solve_linear_system_quantum(
             backend_mode = "ionq_local"
 
     if not counts:
-        # Trapped-ion native basis transpilation: ['rxx', 'rx', 'ry', 'rz', 'h']
-        sim = AerSimulator()
-        ionq_basis = ['rxx', 'rx', 'ry', 'rz', 'h']
-        try:
-            qc_transpiled = transpile(qc_meas, sim, basis_gates=ionq_basis)
-            backend_name = "IonQ Trapped-Ion Native Gate Emulator (Aer)"
-        except Exception:
-            qc_transpiled = transpile(qc_meas, sim)
-            backend_name = "Qiskit AerSimulator"
-
-        job = sim.run(qc_transpiled, shots=shots)
-        counts = job.result().get_counts()
+        # Use IonQ local simulator if available
+        if HAS_IONQ:
+            provider = IonQProvider()
+            backend = provider.get_backend("simulator")
+            backend_name = f"IonQ Local Simulator ({backend.name()})"
+            qc_transpiled = transpile(qc_meas, backend)
+            job = backend.run(qc_transpiled, shots=shots)
+            counts = job.result().get_counts()
+        else:
+            raise RuntimeError("No available backend for simulation (IonQProvider not installed).")
 
     return {
         "solution_state": w_quantum_state,
