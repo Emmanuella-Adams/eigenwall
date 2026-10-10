@@ -10,6 +10,8 @@
 
 **EigenWall** is an experimental investigation into whether quantum linear-system algorithms (HHL-style procedures) can reproduce the inverse-covariance operation central to adaptive antenna beamforming. Using a simulated deep-space communication link as an operational testbed, the project evaluates whether a quantum processor can steer spatial radiation nulls toward interfering emitters while preserving distortionless reception toward a distant spacecraft.
 
+[![Architecture diagram](https://gitdiagram.com/diagram-badge.svg)](https://gitdiagram.com/emmanuella-adams/eigenwall?utm_source=readme&utm_medium=badge)
+
 ```text
                                  EIGENWALL COMPUTATIONAL PIPELINE
                                  
