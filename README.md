@@ -126,7 +126,11 @@ Because MVDR weights are scale-invariant, the exact beamforming solution is pres
 2. **Quantum Phase Estimation:** Evolution under $U = \exp(i R_{\mathrm{scaled}} t)$ with $t = \pi / \lambda_{\max}$ estimates eigenphases:
    $$\sum_i c_i |v_i\rangle |0\rangle^{\otimes m} \xrightarrow{\mathrm{QPE}} \sum_i c_i |v_i\rangle |\tilde{\lambda}_i\rangle$$
 3. **Controlled Inversion Rotation:** Multi-controlled $R_y(\theta_j)$ rotates the ancilla qubit:
-   $$\theta_j = 2 \arcsin\left(\min\left(1.0, \frac{C}{\tilde{\lambda}_j}\right)\right), \quad C \le \lambda_{\min}$$
+
+$$
+\theta_j = 2 \arcsin\left(\min\left(1.0, \frac{C}{\tilde{\lambda}_j}\right)\right),
+\qquad C \le \lambda_{\min}
+$$
 4. **Uncomputation:** Inverse QPE uncomputes the clock register back to $|0\rangle^{\otimes m}$.
 5. **Post-Selection:** Projecting the ancilla into state $|1\rangle$ yields:
    $$|w_q\rangle \propto R^{-1} |a\rangle$$
