@@ -210,3 +210,7 @@ python experiments/experiment_03_qpe_precision.py
 python experiments/experiment_04_condition_number.py
 python experiments/experiment_05_noise.py
 ```
+
+### Development and Verification
+
+Parts of the codebase were initially developed with assistance from Google Antigravity. I subsequently tested and verified the implementation locally, checking its execution and behavior within the available development environment.
