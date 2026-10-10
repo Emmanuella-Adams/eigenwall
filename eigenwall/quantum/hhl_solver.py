@@ -96,9 +96,11 @@ def build_hhl_circuit(
         u_gate = UnitaryGate(u_pow, label=f"U^{power}").control(1)
         qc.append(u_gate, [phase_qr[k]] + list(sys_qr))
 
-    # 4. Inverse QFT on phase
-    iqft = QFTGate(m).inverse()
-    qc.append(iqft, phase_qr)
+# 4. Iterative Quantum Phase Estimation (IQPE)
+from .iqpe import iqpe as _iqpe
+qc, _ = _iqpe(qc, list(sys_qr), mat_pad, phase_qubits=m, target_precision=m)
+# After IQPE, the new phase register is the last quantum register
+phase_qr = qc.qregs[-1]
 
     # 5. Controlled Eigenvalue Inversion Rotation
     # For every computational state j in {1, ..., 2^m - 1} of phase register:
@@ -255,7 +257,9 @@ def quantum_linear_solver(
         measure_all=True
     )
     sim = AerSimulator()
-    transpiled = transpile(qc_meas, sim)
+    # Compile measurement circuit to respect IonQ depth & RXX constraints
+    compiled_meas = compile_ionq(qc_meas, max_depth=800, max_rxx=250)
+    transpiled = transpile(compiled_meas, sim)
     job = sim.run(transpiled, shots=shots)
     counts = job.result().get_counts()
 

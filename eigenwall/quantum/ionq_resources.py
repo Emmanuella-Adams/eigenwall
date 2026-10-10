@@ -78,3 +78,48 @@ def export_resource_table(resource_dict: Dict[str, Any], output_path: str = None
     if output_path:
         df.to_csv(output_path, index=False)
     return df
+def compile_ionq(circuit: QuantumCircuit, max_depth: int = 800, max_rxx: int = 250, max_trials: int = 3) -> QuantumCircuit:
+    """Iteratively transpile the circuit to meet IonQ hardware constraints.
+
+    The function attempts up to ``max_trials`` transpilation runs, increasing the
+    ``optimization_level`` each time.  It stops early when both the circuit depth
+    and the number of native ``rxx`` gates are below the supplied thresholds.
+    If the constraints cannot be satisfied, the best‑found circuit is returned
+    together with a warning.
+
+    Args:
+        circuit: The original QuantumCircuit.
+        max_depth: Desired maximum circuit depth (IonQ basis).
+        max_rxx: Maximum allowed native two‑qubit ``rxx`` gates.
+        max_trials: Number of optimisation levels to try (1‑3).
+
+    Returns:
+        QuantumCircuit: A transpiled circuit that respects the constraints as
+        closely as possible.
+    """
+    from qiskit_aer import AerSimulator
+    sim = AerSimulator()
+    best_circuit = circuit
+    best_metrics = None
+    for level in range(max_trials):
+        try:
+            transpiled = transpile(
+                circuit,
+                sim,
+                basis_gates=["rxx", "rx", "ry", "rz", "h"],
+                optimization_level=level,
+            )
+        except Exception:
+            transpiled = transpile(circuit, sim, optimization_level=level)
+        depth = transpiled.depth()
+        rxx_count = transpiled.count_ops().get("rxx", 0)
+        if best_metrics is None or (depth < best_metrics[0] and rxx_count < best_metrics[1]):
+            best_circuit = transpiled
+            best_metrics = (depth, rxx_count)
+        if depth <= max_depth and rxx_count <= max_rxx:
+            return transpiled
+    # Constraints not met – return best effort circuit with warning
+    print(
+        f"[WARNING] IonQ compile target not met: depth={best_metrics[0]}, rxx={best_metrics[1]}. Using best‑effort circuit."
+    )
+    return best_circuit
