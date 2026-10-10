@@ -97,7 +97,7 @@ EigenWall is built to run on the **IonQ Trapped-Ion Simulator and Hardware archi
 
 EigenWall adheres to strict technical rigor:
 
-> **We do not make unproven claims of immediate quantum supremacy.**
+> **I do not make unproven claims of immediate quantum supremacy.**
 
 Quantum linear system algorithms involve known real-world engineering constraints that EigenWall explicitly models:
 1. **The State Preparation Bottleneck:** Initializing arbitrary classical steering vectors $|a\rangle$ into a quantum register generally requires $\mathcal{O}(N)$ gates unless structured isometric initialization or quantum RAM (QRAM) is available.
